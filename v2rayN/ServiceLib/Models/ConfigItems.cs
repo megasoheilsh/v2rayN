@@ -1,4 +1,4 @@
-﻿namespace ServiceLib.Models
+namespace ServiceLib.Models
 {
     [Serializable]
     public class CoreBasicItem
@@ -70,7 +70,8 @@
         public bool EnableStatistics { get; set; }
         public bool DisplayRealTimeSpeed { get; set; }
         public bool KeepOlderDedupl { get; set; }
-        public int AutoUpdateInterval { get; set; }
+        public int AutoUpdateInterval { get; set; } = 1;
+        public int AutoUpdateCoreInterval { get; set; } = 1;
         public bool EnableSecurityProtocolTls13 { get; set; }
         public int TrayMenuServersLimit { get; set; } = 20;
         public bool EnableHWA { get; set; } = false;

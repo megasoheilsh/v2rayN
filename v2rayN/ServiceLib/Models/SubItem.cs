@@ -1,4 +1,4 @@
-﻿using SQLite;
+using SQLite;
 
 namespace ServiceLib.Models
 {
@@ -32,7 +32,7 @@ namespace ServiceLib.Models
 
         public string? NextProfile { get; set; }
 
-        public int? PreSocksPort { get; set; }
+        public int? PreSocksPort { get; set; } = 10808;
 
         public string? Memo { get; set; }
     }

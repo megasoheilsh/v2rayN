@@ -154,7 +154,7 @@ namespace ServiceLib.Handler
                 {
                     CoreType = ECoreType.sing_box,
                     CoreExes = ["sing-box-client", "sing-box"],
-                    Arguments = "run -c {0} --disable-color",
+                    Arguments = "run -c config.json --disable-color",
                     Url = GetCoreUrl(ECoreType.sing_box),
 
                     ReleaseApiUrl = urlSingbox.Replace(Global.GithubUrl, Global.GithubApiUrl),

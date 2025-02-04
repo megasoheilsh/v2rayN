@@ -1,5 +1,7 @@
 using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
+using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 
 namespace ServiceLib.Services
 {
@@ -22,6 +24,25 @@ namespace ServiceLib.Services
                 {
                     _updateFunc?.Invoke(false, ResUI.MsgDownloadV2rayCoreSuccessfully);
                     _updateFunc?.Invoke(true, Utils.UrlEncode(fileName));
+
+                    // Launch AmazTool to perform the update
+                    if (Utils.UpgradeAppExists(out string upgradeFileName))
+                    {
+                        try
+                        {
+                            Process.Start(new ProcessStartInfo
+                            {
+                                FileName = upgradeFileName,
+                                Arguments = $"\"{fileName}\"",
+                                UseShellExecute = true
+                            });
+                        }
+                        catch (Exception ex)
+                        {
+                            Logging.SaveLog(_tag, ex);
+                            _updateFunc?.Invoke(false, ex.Message);
+                        }
+                    }
                 }
                 else
                 {
@@ -66,6 +87,43 @@ namespace ServiceLib.Services
 
                     try
                     {
+                        var toPath = Utils.GetBinPath("", type.ToString());
+                        if (!Directory.Exists(toPath))
+                        {
+                            Directory.CreateDirectory(toPath);
+                        }
+
+                        if (fileName.Contains(".tar.gz"))
+                        {
+                            FileManager.DecompressTarFile(fileName, toPath);
+                            var dir = new DirectoryInfo(toPath);
+                            if (dir.Exists)
+                            {
+                                foreach (var subDir in dir.GetDirectories())
+                                {
+                                    FileManager.CopyDirectory(subDir.FullName, toPath, false, true);
+                                    subDir.Delete(true);
+                                }
+                            }
+                        }
+                        else if (fileName.Contains(".gz"))
+                        {
+                            FileManager.DecompressFile(fileName, toPath, type.ToString());
+                        }
+                        else
+                        {
+                            FileManager.ZipExtractToFile(fileName, toPath, "");
+                        }
+
+                        if (Utils.IsNonWindows())
+                        {
+                            var coreFile = Path.Combine(toPath, type.ToString().ToLower());
+                            if (File.Exists(coreFile))
+                            {
+                                Utils.SetLinuxChmod(coreFile).Wait();
+                            }
+                        }
+
                         _updateFunc?.Invoke(true, fileName);
                     }
                     catch (Exception ex)

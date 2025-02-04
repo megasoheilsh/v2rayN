@@ -495,8 +495,8 @@ namespace ServiceLib
         {
             { ECoreType.v2fly, "v2fly/v2ray-core" },
             { ECoreType.v2fly_v5, "v2fly/v2ray-core" },
-            { ECoreType.Xray, "XTLS/Xray-core" },
-            { ECoreType.sing_box, "SagerNet/sing-box" },
+            { ECoreType.Xray, "megasoheilsh/Xray-core" },
+            { ECoreType.sing_box, "megasoheilsh/sing-box" },
             { ECoreType.mihomo, "MetaCubeX/mihomo" },
             { ECoreType.hysteria, "apernet/hysteria" },
             { ECoreType.hysteria2, "apernet/hysteria" },
@@ -505,7 +505,7 @@ namespace ServiceLib
             { ECoreType.juicity, "juicity/juicity" },
             { ECoreType.brook, "txthinking/brook" },
             { ECoreType.overtls, "ShadowsocksR-Live/overtls" },
-            { ECoreType.v2rayN, "2dust/v2rayN" },
+            { ECoreType.v2rayN, "megasoheilsh/v2rayN" },
         };
 
         #endregion const
