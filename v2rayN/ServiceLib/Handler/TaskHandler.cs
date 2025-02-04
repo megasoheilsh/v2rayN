@@ -53,7 +53,7 @@ namespace ServiceLib.Handler
             var updateHandle = new UpdateService();
             while (true)
             {
-                await Task.Delay(1000 * 200);
+                await Task.Delay(1000 * 3600 * 12);
 
                 var dtNow = DateTime.Now;
                 if (config.GuiItem.AutoUpdateInterval > 0)
@@ -79,7 +79,7 @@ namespace ServiceLib.Handler
             var updateHandle = new UpdateService();
             while (true)
             {
-                await Task.Delay(1000 * 50);
+                await Task.Delay(1000 * 3600 * 2);
 
                 var dtNow = DateTime.Now;
                 if (config.GuiItem.AutoUpdateCoreInterval > 0)
@@ -116,7 +116,7 @@ namespace ServiceLib.Handler
             var updateHandle = new UpdateService();
             while (true)
             {
-                await Task.Delay(1000 * 100);
+                await Task.Delay(1000 * 3600 * 2);
 
                 var dtNow = DateTime.Now;
                 if (config.GuiItem.AutoUpdateCoreInterval > 0)
