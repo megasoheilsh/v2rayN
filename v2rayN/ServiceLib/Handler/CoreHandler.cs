@@ -70,7 +70,7 @@ namespace ServiceLib.Handler
                 return;
             }
 
-            var fileName = Utils.GetConfigPath(Global.CoreConfigFileName);
+            var fileName = Utils.GetBinConfigPath(Global.CoreConfigFileName);
             var result = await CoreConfigHandler.GenerateClientConfig(node, fileName);
             if (result.Success != true)
             {
@@ -101,7 +101,8 @@ namespace ServiceLib.Handler
         public async Task<int> LoadCoreConfigSpeedtest(List<ServerTestItem> selecteds)
         {
             var coreType = selecteds.Exists(t => t.ConfigType is EConfigType.Hysteria2 or EConfigType.TUIC or EConfigType.WireGuard) ? ECoreType.sing_box : ECoreType.Xray;
-            var configPath = Utils.GetConfigPath(Global.CoreSpeedtestConfigFileName);
+            var fileName = string.Format(Global.CoreSpeedtestConfigFileName, Utils.GetGuid(false));
+            var configPath = Utils.GetBinConfigPath(fileName);
             var result = await CoreConfigHandler.GenerateClientSpeedtestConfig(_config, configPath, selecteds, coreType);
             UpdateFunc(false, result.Msg);
             if (result.Success != true)
@@ -113,7 +114,34 @@ namespace ServiceLib.Handler
             UpdateFunc(false, configPath);
 
             var coreInfo = CoreInfoHandler.Instance.GetCoreInfo(coreType);
-            var proc = await RunProcess(coreInfo, Global.CoreSpeedtestConfigFileName, true, false);
+            var proc = await RunProcess(coreInfo, fileName, true, false);
+            if (proc is null)
+            {
+                return -1;
+            }
+
+            return proc.Id;
+        }
+
+        public async Task<int> LoadCoreConfigSpeedtest(ServerTestItem testItem)
+        {
+            var node = await AppHandler.Instance.GetProfileItem(testItem.IndexId);
+            if (node is null)
+            {
+                return -1;
+            }
+
+            var fileName = string.Format(Global.CoreSpeedtestConfigFileName, Utils.GetGuid(false));
+            var configPath = Utils.GetBinConfigPath(fileName);
+            var result = await CoreConfigHandler.GenerateClientSpeedtestConfig(_config, node, testItem, configPath);
+            if (result.Success != true)
+            {
+                return -1;
+            }
+
+            var coreType = AppHandler.Instance.GetCoreType(node, node.ConfigType);
+            var coreInfo = CoreInfoHandler.Instance.GetCoreInfo(coreType);
+            var proc = await RunProcess(coreInfo, fileName, true, false);
             if (proc is null)
             {
                 return -1;
@@ -175,7 +203,7 @@ namespace ServiceLib.Handler
                 if (itemSocks != null)
                 {
                     var preCoreType = itemSocks.CoreType ?? ECoreType.sing_box;
-                    var fileName = Utils.GetConfigPath(Global.CorePreConfigFileName);
+                    var fileName = Utils.GetBinConfigPath(Global.CorePreConfigFileName);
                     var result = await CoreConfigHandler.GenerateClientConfig(itemSocks, fileName);
                     if (result.Success)
                     {
@@ -212,7 +240,7 @@ namespace ServiceLib.Handler
         private async Task<Process?> RunProcess(CoreInfo? coreInfo, string configPath, bool displayLog, bool mayNeedSudo)
         {
             var fileName = CoreInfoHandler.Instance.GetCoreExecFile(coreInfo, out var msg);
-            if (Utils.IsNullOrEmpty(fileName))
+            if (fileName.IsNullOrEmpty())
             {
                 UpdateFunc(false, msg);
                 return null;
@@ -225,8 +253,8 @@ namespace ServiceLib.Handler
                     StartInfo = new()
                     {
                         FileName = fileName,
-                        Arguments = string.Format(coreInfo.Arguments, coreInfo.AbsolutePath ? Utils.GetConfigPath(configPath) : configPath),
-                        WorkingDirectory = Utils.GetConfigPath(),
+                        Arguments = string.Format(coreInfo.Arguments, coreInfo.AbsolutePath ? Utils.GetBinConfigPath(configPath).AppendQuotes() : configPath),
+                        WorkingDirectory = Utils.GetBinConfigPath(),
                         UseShellExecute = false,
                         RedirectStandardOutput = displayLog,
                         RedirectStandardError = displayLog,
@@ -246,13 +274,13 @@ namespace ServiceLib.Handler
                 {
                     proc.OutputDataReceived += (sender, e) =>
                     {
-                        if (Utils.IsNullOrEmpty(e.Data))
+                        if (e.Data.IsNullOrEmpty())
                             return;
                         UpdateFunc(false, e.Data + Environment.NewLine);
                     };
                     proc.ErrorDataReceived += (sender, e) =>
                     {
-                        if (Utils.IsNullOrEmpty(e.Data))
+                        if (e.Data.IsNullOrEmpty())
                             return;
                         UpdateFunc(false, e.Data + Environment.NewLine);
                     };
@@ -287,7 +315,7 @@ namespace ServiceLib.Handler
             catch (Exception ex)
             {
                 Logging.SaveLog(_tag, ex);
-                UpdateFunc(true, ex.Message);
+                UpdateFunc(mayNeedSudo, ex.Message);
                 return null;
             }
         }
@@ -298,7 +326,7 @@ namespace ServiceLib.Handler
 
         private async Task RunProcessAsLinuxSudo(Process proc, string fileName, CoreInfo coreInfo, string configPath)
         {
-            var cmdLine = $"{fileName.AppendQuotes()} {string.Format(coreInfo.Arguments, Utils.GetConfigPath(configPath).AppendQuotes())}";
+            var cmdLine = $"{fileName.AppendQuotes()} {string.Format(coreInfo.Arguments, Utils.GetBinConfigPath(configPath).AppendQuotes())}";
 
             var shFilePath = await CreateLinuxShellFile(cmdLine, "run_as_sudo.sh");
             proc.StartInfo.FileName = shFilePath;
@@ -352,7 +380,7 @@ namespace ServiceLib.Handler
         private async Task<string> CreateLinuxShellFile(string cmdLine, string fileName)
         {
             //Shell scripts
-            var shFilePath = Utils.GetBinPath(AppHandler.Instance.IsAdministrator ? "root_" + fileName : fileName);
+            var shFilePath = Utils.GetBinConfigPath(AppHandler.Instance.IsAdministrator ? "root_" + fileName : fileName);
             File.Delete(shFilePath);
             var sb = new StringBuilder();
             sb.AppendLine("#!/bin/sh");

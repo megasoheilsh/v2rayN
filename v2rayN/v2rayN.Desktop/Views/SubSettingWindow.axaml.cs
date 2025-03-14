@@ -69,7 +69,7 @@ namespace v2rayN.Desktop.Views
 
         private async Task ShareSub(string url)
         {
-            if (Utils.IsNullOrEmpty(url))
+            if (url.IsNullOrEmpty())
             {
                 return;
             }
@@ -84,7 +84,10 @@ namespace v2rayN.Desktop.Views
 
         private void LstSubscription_SelectionChanged(object? sender, SelectionChangedEventArgs e)
         {
-            ViewModel.SelectedSources = lstSubscription.SelectedItems.Cast<SubItem>().ToList();
+            if (ViewModel != null)
+            {
+                ViewModel.SelectedSources = lstSubscription.SelectedItems.Cast<SubItem>().ToList();
+            }
         }
 
         private void menuClose_Click(object? sender, RoutedEventArgs e)

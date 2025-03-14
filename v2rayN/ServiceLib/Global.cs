@@ -16,7 +16,7 @@ namespace ServiceLib
         public const string ConfigFileName = "guiNConfig.json";
         public const string CoreConfigFileName = "config.json";
         public const string CorePreConfigFileName = "configPre.json";
-        public const string CoreSpeedtestConfigFileName = "configSpeedtest.json";
+        public const string CoreSpeedtestConfigFileName = "configTest{0}.json";
         public const string CoreMultipleLoadConfigFileName = "configMultipleLoad.json";
         public const string ClashMixinConfigFileName = "Mixin.yaml";
 
@@ -38,6 +38,8 @@ namespace ServiceLib
         public const string ClashTunYaml = NamespaceSample + "clash_tun_yaml";
         public const string LinuxAutostartConfig = NamespaceSample + "linux_autostart_config";
         public const string PacFileName = NamespaceSample + "pac";
+        public const string ProxySetOSXShellFileName = NamespaceSample + "proxy_set_osx_sh";
+        public const string ProxySetLinuxShellFileName = NamespaceSample + "proxy_set_linux_sh";
 
         public const string DefaultSecurity = "auto";
         public const string DefaultNetwork = "tcp";
@@ -64,14 +66,14 @@ namespace ServiceLib
         public const string GrpcGunMode = "gun";
         public const string GrpcMultiMode = "multi";
         public const int MaxPort = 65536;
-        public const string DelayUnit = "";
-        public const string SpeedUnit = "";
         public const int MinFontSize = 8;
         public const string RebootAs = "rebootas";
         public const string AvaAssets = "avares://v2rayN/Assets/";
-        public const string LocalAppData = "V2RAYN_LOCAL_APPLICATION_DATA";
+        public const string LocalAppData = "V2RAYN_LOCAL_APPLICATION_DATA_V2";
         public const string V2RayLocalAsset = "V2RAY_LOCATION_ASSET";
         public const string XrayLocalAsset = "XRAY_LOCATION_ASSET";
+        public const int SpeedTestPageSize = 1000;
+        public const string LinuxBash = "/bin/bash";
 
         public static readonly List<string> IEProxyProtocols =
         [
@@ -104,10 +106,10 @@ namespace ServiceLib
 
         public static readonly List<string> SpeedTestUrls =
         [
-            @"https://speed.cloudflare.com/__down?bytes=100000000",
-            @"https://speed.cloudflare.com/__down?bytes=50000000",
+            @"https://cachefly.cachefly.net/50mb.test",
             @"https://speed.cloudflare.com/__down?bytes=10000000",
-            @"https://cachefly.cachefly.net/50mb.test"
+            @"https://speed.cloudflare.com/__down?bytes=50000000",
+            @"https://speed.cloudflare.com/__down?bytes=100000000",
         ];
 
         public static readonly List<string> SpeedPingTestUrls =
@@ -263,7 +265,8 @@ namespace ServiceLib
             "utp",
             "wechat-video",
             "dtls",
-            "wireguard"
+            "wireguard",
+            "dns"
         ];
 
         public static readonly List<string> CoreTypes =
@@ -427,12 +430,12 @@ namespace ServiceLib
             "fakedns+others"
         ];
 
-        public static readonly List<string> TunMtus =
+        public static readonly List<int> TunMtus =
         [
-            "1280",
-            "1408",
-            "1500",
-            "9000"
+            1280,
+            1408,
+            1500,
+            9000
         ];
 
         public static readonly List<string> TunStacks =
@@ -507,6 +510,13 @@ namespace ServiceLib
             { ECoreType.overtls, "ShadowsocksR-Live/overtls" },
             { ECoreType.v2rayN, "megasoheilsh/v2rayN" },
         };
+
+        public static readonly List<string> OtherGeoUrls =
+        [
+            @"https://raw.githubusercontent.com/Loyalsoldier/geoip/release/geoip-only-cn-private.dat",
+            @"https://raw.githubusercontent.com/Loyalsoldier/geoip/release/Country.mmdb",
+            @"https://github.com/MetaCubeX/meta-rules-dat/releases/download/latest/geoip.metadb"
+        ];
 
         #endregion const
     }

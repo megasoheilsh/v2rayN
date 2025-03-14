@@ -157,7 +157,7 @@ namespace ServiceLib.Models
         public int SpeedTestTimeout { get; set; }
         public string SpeedTestUrl { get; set; }
         public string SpeedPingTestUrl { get; set; }
-        public int SpeedTestPageSize { get; set; }
+        public int MixedConcurrencyCount { get; set; }
     }
 
     [Serializable]
@@ -198,6 +198,7 @@ namespace ServiceLib.Models
     {
         public int UpMbps { get; set; }
         public int DownMbps { get; set; }
+        public int HopInterval { get; set; } = 30;
     }
 
     [Serializable]

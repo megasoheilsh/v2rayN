@@ -66,22 +66,19 @@ namespace v2rayN.Desktop.Views
                 cmbCoreType6.Items.Add(it);
             });
 
-            for (int i = 2; i <= 6; i++)
+            for (var i = 2; i <= 8; i++)
+            {
+                cmbMixedConcurrencyCount.Items.Add(i);
+            }
+            for (var i = 2; i <= 6; i++)
             {
                 cmbSpeedTestTimeout.Items.Add(i * 5);
             }
-            Global.SpeedTestUrls.ForEach(it =>
-            {
-                cmbSpeedTestUrl.Items.Add(it);
-            });
-            Global.SpeedPingTestUrls.ForEach(it =>
-            {
-                cmbSpeedPingTestUrl.Items.Add(it);
-            });
-            Global.SubConvertUrls.ForEach(it =>
-            {
-                cmbSubConvertUrl.Items.Add(it);
-            });
+
+            cmbSpeedTestUrl.ItemsSource = Global.SpeedTestUrls;
+            cmbSpeedPingTestUrl.ItemsSource = Global.SpeedPingTestUrls;
+            cmbSubConvertUrl.ItemsSource = Global.SubConvertUrls;
+
             Global.GeoFilesSources.ForEach(it =>
             {
                 cmbGetFilesSourceUrl.Items.Add(it);
@@ -137,11 +134,12 @@ namespace v2rayN.Desktop.Views
                 this.Bind(ViewModel, vm => vm.AutoUpdateInterval, v => v.txtautoUpdateInterval.Text).DisposeWith(disposables);
                 this.Bind(ViewModel, vm => vm.AutoUpdateCoreInterval, v => v.txtautoUpdateCoreInterval.Text).DisposeWith(disposables);
                 this.Bind(ViewModel, vm => vm.CurrentFontFamily, v => v.cmbcurrentFontFamily.SelectedValue).DisposeWith(disposables);
+                this.Bind(ViewModel, vm => vm.CurrentFontFamily, v => v.cmbcurrentFontFamily.Text).DisposeWith(disposables);
                 this.Bind(ViewModel, vm => vm.SpeedTestTimeout, v => v.cmbSpeedTestTimeout.SelectedValue).DisposeWith(disposables);
-                this.Bind(ViewModel, vm => vm.SpeedTestUrl, v => v.cmbSpeedTestUrl.SelectedValue).DisposeWith(disposables);
-                this.Bind(ViewModel, vm => vm.SpeedPingTestUrl, v => v.cmbSpeedPingTestUrl.SelectedValue).DisposeWith(disposables);
-                this.Bind(ViewModel, vm => vm.SpeedTestPageSize, v => v.txtSpeedTestPageSize.Text).DisposeWith(disposables);
-                this.Bind(ViewModel, vm => vm.SubConvertUrl, v => v.cmbSubConvertUrl.SelectedValue).DisposeWith(disposables);
+                this.Bind(ViewModel, vm => vm.SpeedTestUrl, v => v.cmbSpeedTestUrl.Text).DisposeWith(disposables);
+                this.Bind(ViewModel, vm => vm.SpeedPingTestUrl, v => v.cmbSpeedPingTestUrl.Text).DisposeWith(disposables);
+                this.Bind(ViewModel, vm => vm.MixedConcurrencyCount, v => v.cmbMixedConcurrencyCount.SelectedValue).DisposeWith(disposables);
+                this.Bind(ViewModel, vm => vm.SubConvertUrl, v => v.cmbSubConvertUrl.Text).DisposeWith(disposables);
                 this.Bind(ViewModel, vm => vm.MainGirdOrientation, v => v.cmbMainGirdOrientation.SelectedIndex).DisposeWith(disposables);
                 this.Bind(ViewModel, vm => vm.GeoFileSourceUrl, v => v.cmbGetFilesSourceUrl.SelectedValue).DisposeWith(disposables);
                 this.Bind(ViewModel, vm => vm.SrsFileSourceUrl, v => v.cmbSrsFilesSourceUrl.SelectedValue).DisposeWith(disposables);
@@ -171,8 +169,15 @@ namespace v2rayN.Desktop.Views
             if (Utils.IsWindows())
             {
                 txbSettingsExceptionTip2.IsVisible = false;
+
+                txtLinuxSudoPassword.IsVisible = false;
+                labLinuxSudoPassword.IsVisible = false;
+                labLinuxSudoPasswordTip.IsVisible = false;
+
+                labHide2TrayWhenClose.IsVisible = false;
+                togHide2TrayWhenClose.IsVisible = false;
             }
-            else
+            else if (Utils.IsLinux())
             {
                 txbSettingsExceptionTip.IsVisible = false;
                 panSystemProxyAdvanced.IsVisible = false;
@@ -183,6 +188,13 @@ namespace v2rayN.Desktop.Views
                 tbAutoRun.IsVisible = false;
                 togAutoRun.IsVisible = false;
                 //TODO
+            else if (Utils.IsOSX())
+            {
+                txbSettingsExceptionTip.IsVisible = false;
+                panSystemProxyAdvanced.IsVisible = false;
+
+                labHide2TrayWhenClose.IsVisible = false;
+                togHide2TrayWhenClose.IsVisible = false;
             }
         }
 
@@ -204,8 +216,9 @@ namespace v2rayN.Desktop.Views
         private async Task InitSettingFont()
         {
             var lstFonts = await GetFonts();
-            lstFonts.ForEach(it => { cmbcurrentFontFamily.Items.Add(it); });
-            cmbcurrentFontFamily.Items.Add(string.Empty);
+
+            lstFonts.Add(string.Empty);
+            cmbcurrentFontFamily.ItemsSource = lstFonts;
         }
 
         private async Task<List<string>> GetFonts()
@@ -243,7 +256,10 @@ namespace v2rayN.Desktop.Views
 
         private void ClbdestOverride_SelectionChanged(object? sender, SelectionChangedEventArgs e)
         {
-            ViewModel.destOverride = clbdestOverride.SelectedItems.Cast<string>().ToList();
+            if (ViewModel != null)
+            {
+                ViewModel.destOverride = clbdestOverride.SelectedItems.Cast<string>().ToList();
+            }
         }
     }
 }

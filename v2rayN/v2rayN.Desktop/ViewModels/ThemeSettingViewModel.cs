@@ -69,7 +69,7 @@ namespace v2rayN.Desktop.ViewModels
                     y => y != null && !y.IsNullOrEmpty())
                 .Subscribe(c =>
                 {
-                    if (Utils.IsNotEmpty(CurrentLanguage) && _config.UiItem.CurrentLanguage != CurrentLanguage)
+                    if (CurrentLanguage.IsNotEmpty() && _config.UiItem.CurrentLanguage != CurrentLanguage)
                     {
                         _config.UiItem.CurrentLanguage = CurrentLanguage;
                         Thread.CurrentThread.CurrentUICulture = new(CurrentLanguage);
@@ -118,6 +118,17 @@ namespace v2rayN.Desktop.ViewModels
                 Property = TemplatedControl.FontSizeProperty,
                 Value = size,
             });
+            Application.Current?.Styles.Add(style);
+
+            ModifyFontSizeEx(size);
+        }
+
+        private void ModifyFontSizeEx(double size)
+        {
+            //DataGrid
+            var rowHeight = 20 + (size / 2);
+            var style = new Style(x => x.OfType<DataGrid>());
+            style.Add(new Setter(DataGrid.RowHeightProperty, rowHeight));
             Application.Current?.Styles.Add(style);
         }
 

@@ -79,6 +79,7 @@ namespace v2rayN.Views
                 this.BindCommand(ViewModel, vm => vm.RealPingServerCmd, v => v.menuRealPingServer).DisposeWith(disposables);
                 this.BindCommand(ViewModel, vm => vm.SpeedServerCmd, v => v.menuSpeedServer).DisposeWith(disposables);
                 this.BindCommand(ViewModel, vm => vm.SortServerResultCmd, v => v.menuSortServerResult).DisposeWith(disposables);
+                this.BindCommand(ViewModel, vm => vm.RemoveInvalidServerResultCmd, v => v.menuRemoveInvalidServerResult).DisposeWith(disposables);
 
                 //servers export
                 this.BindCommand(ViewModel, vm => vm.Export2ClientConfigCmd, v => v.menuExport2ClientConfig).DisposeWith(disposables);
@@ -165,7 +166,7 @@ namespace v2rayN.Views
                 case EViewAction.DispatcherRefreshServersBiz:
                     Application.Current?.Dispatcher.Invoke((() =>
                     {
-                        ViewModel?.RefreshServersBiz();
+                        _ = RefreshServersBiz();
                     }), DispatcherPriority.Normal);
                     break;
             }
@@ -185,9 +186,25 @@ namespace v2rayN.Views
             await DialogHost.Show(dialog, "RootDialog");
         }
 
+        public async Task RefreshServersBiz()
+        {
+            if (ViewModel != null)
+            {
+                await ViewModel.RefreshServersBiz();
+            }
+
+            if (lstProfiles.SelectedIndex > 0)
+            {
+                lstProfiles.ScrollIntoView(lstProfiles.SelectedItem, null);
+            }
+        }
+
         private void lstProfiles_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {
-            ViewModel.SelectedProfiles = lstProfiles.SelectedItems.Cast<ProfileItemModel>().ToList();
+            if (ViewModel != null)
+            {
+                ViewModel.SelectedProfiles = lstProfiles.SelectedItems.Cast<ProfileItemModel>().ToList();
+            }
         }
 
         private void LstProfiles_LoadingRow(object? sender, DataGridRowEventArgs e)
@@ -352,13 +369,13 @@ namespace v2rayN.Views
         private void StorageUI(string? n = null)
         {
             List<ColumnItem> lvColumnItem = new();
-            for (int k = 0; k < lstProfiles.Columns.Count; k++)
+            foreach (var t in lstProfiles.Columns)
             {
-                var item2 = (MyDGTextColumn)lstProfiles.Columns[k];
+                var item2 = (MyDGTextColumn)t;
                 lvColumnItem.Add(new()
                 {
                     Name = item2.ExName,
-                    Width = item2.Visibility == Visibility.Visible ? Utils.ToInt(item2.ActualWidth) : -1,
+                    Width = (int)(item2.Visibility == Visibility.Visible ? item2.ActualWidth : -1),
                     Index = item2.DisplayIndex
                 });
             }

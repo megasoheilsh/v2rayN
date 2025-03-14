@@ -75,7 +75,7 @@ namespace ServiceLib.Handler
                 new CoreInfo
                 {
                     CoreType = ECoreType.v2fly,
-                    CoreExes = ["wv2ray", "v2ray"],
+                    CoreExes = ["v2ray"],
                     Arguments = "{0}",
                     Url = GetCoreUrl(ECoreType.v2fly),
                     Match = "V2Ray",
@@ -95,7 +95,7 @@ namespace ServiceLib.Handler
                 new CoreInfo
                 {
                     CoreType = ECoreType.Xray,
-                    CoreExes = ["wxray","xray"],
+                    CoreExes = ["xray"],
                     Arguments = "run -c {0}",
                     Url = GetCoreUrl(ECoreType.Xray),
                     ReleaseApiUrl = urlXray.Replace(Global.GithubUrl, Global.GithubApiUrl),
@@ -129,8 +129,8 @@ namespace ServiceLib.Handler
                 new CoreInfo
                 {
                     CoreType = ECoreType.hysteria,
-                    CoreExes = ["hysteria-windows-amd64", "hysteria"],
-                    Arguments = "-c {0}",
+                    CoreExes = ["hysteria"],
+                    Arguments = "",
                     Url = GetCoreUrl(ECoreType.hysteria),
                 },
 
@@ -180,7 +180,7 @@ namespace ServiceLib.Handler
                 {
                     CoreType = ECoreType.hysteria2,
                     CoreExes = ["hysteria-windows-amd64", "hysteria-linux-amd64", "hysteria"],
-                    Arguments = "-c {0}",
+                    Arguments = "",
                     Url = GetCoreUrl(ECoreType.hysteria2),
                 },
 

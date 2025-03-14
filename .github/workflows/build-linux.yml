@@ -27,6 +27,9 @@ jobs:
     steps:
     - name: Checkout
       uses: actions/checkout@v4.2.2
+      with:
+        submodules: 'recursive'
+        fetch-depth: '0'
 
     - name: Setup
       uses: actions/setup-dotnet@v4.3.0
@@ -36,13 +39,13 @@ jobs:
     - name: Build
       run: |
         cd v2rayN 
-        dotnet publish ./v2rayN.Desktop/v2rayN.Desktop.csproj -c Release -r linux-x64   --self-contained=true -p:PublishReadyToRun=false -p:PublishSingleFile=true -o $OutputPath64
-        dotnet publish ./v2rayN.Desktop/v2rayN.Desktop.csproj -c Release -r linux-arm64 --self-contained=true -p:PublishReadyToRun=false -p:PublishSingleFile=true -o $OutputPathArm64
-        dotnet publish ./AmazTool/AmazTool.csproj -c Release -r linux-x64   --self-contained=true -p:PublishReadyToRun=false -p:PublishSingleFile=true -p:PublishTrimmed=true -o $OutputPath64
-        dotnet publish ./AmazTool/AmazTool.csproj -c Release -r linux-arm64 --self-contained=true -p:PublishReadyToRun=false -p:PublishSingleFile=true -p:PublishTrimmed=true -o $OutputPathArm64
+        dotnet publish ./v2rayN.Desktop/v2rayN.Desktop.csproj -c Release -r linux-x64   --self-contained=true -o $OutputPath64
+        dotnet publish ./v2rayN.Desktop/v2rayN.Desktop.csproj -c Release -r linux-arm64 --self-contained=true -o $OutputPathArm64
+        dotnet publish ./AmazTool/AmazTool.csproj             -c Release -r linux-x64   --self-contained=true -p:PublishTrimmed=true -o $OutputPath64
+        dotnet publish ./AmazTool/AmazTool.csproj             -c Release -r linux-arm64 --self-contained=true -p:PublishTrimmed=true -o $OutputPathArm64
 
     - name: Upload build artifacts
-      uses: actions/upload-artifact@v4.6.0
+      uses: actions/upload-artifact@v4.6.1
       with:
         name: v2rayN-linux
         path: |
@@ -68,9 +71,8 @@ jobs:
     - name: Package AppImage
       if: github.event.inputs.release_tag != ''
       run: |
-        chmod 755 package-appimage.sh
-        ./package-appimage.sh $OutputArch $OutputPath64 ${{ github.event.inputs.release_tag }}
-        ./package-appimage.sh $OutputArchArm $OutputPathArm64 ${{ github.event.inputs.release_tag }}
+        chmod a+x package-appimage.sh
+        ./package-appimage.sh
 
     - name: Upload AppImage to release
       uses: svenstaro/upload-release-action@v2

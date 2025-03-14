@@ -175,10 +175,10 @@
     <value>初始化配置</value>
   </data>
   <data name="IsLatestCore" xml:space="preserve">
-    <value>{0} {1} 已是最新版本</value>
+    <value>{0} {1} 已是最新版本。</value>
   </data>
   <data name="IsLatestN" xml:space="preserve">
-    <value>{0} {1} 已是最新版本</value>
+    <value>{0} {1} 已是最新版本。</value>
   </data>
   <data name="LvAddress" xml:space="preserve">
     <value>地址</value>
@@ -209,9 +209,6 @@
   </data>
   <data name="LvTransportProtocol" xml:space="preserve">
     <value>传输协议</value>
-  </data>
-  <data name="MsgClearSubscription" xml:space="preserve">
-    <value>清除原订阅内容</value>
   </data>
   <data name="MsgDownloadV2rayCoreSuccessfully" xml:space="preserve">
     <value>下载Core成功</value>
@@ -277,7 +274,7 @@
     <value>请先选择服务器</value>
   </data>
   <data name="RemoveDuplicateServerResult" xml:space="preserve">
-    <value>服务器去重完成。原数量: {0}，现数量: {1}</value>
+    <value>服务器去重完成。原数量: {0}，现数量: {1}。</value>
   </data>
   <data name="RemoveServer" xml:space="preserve">
     <value>是否确定移除服务器？</value>
@@ -718,9 +715,6 @@
   <data name="TbSettingsExceptionTip" xml:space="preserve">
     <value>例外：对于下列字符开头的地址，不使用代理配置文件。使用分号(;)分隔。</value>
   </data>
-  <data name="TbSettingsHttpPort" xml:space="preserve">
-    <value>本地http监听端口</value>
-  </data>
   <data name="TbSettingsDisplayRealTimeSpeed" xml:space="preserve">
     <value>显示实时速度（需重启）</value>
   </data>
@@ -929,7 +923,7 @@
     <value>速度(M/s)</value>
   </data>
   <data name="FailedToRunCore" xml:space="preserve">
-    <value>运行Core失败，请查看日志</value>
+    <value>运行 Core 失败，请查看提示信息</value>
   </data>
   <data name="LvFilter" xml:space="preserve">
     <value>别名正则过滤</value>
@@ -1106,7 +1100,7 @@
     <value>Reserved(2,3,4)</value>
   </data>
   <data name="TbLocalAddress" xml:space="preserve">
-    <value>Address(Ip,Ipv6)</value>
+    <value>Address(Ipv4,Ipv6)</value>
   </data>
   <data name="TbPath7" xml:space="preserve">
     <value>混淆密码(obfs password)</value>
@@ -1255,9 +1249,6 @@
   <data name="menuShowOrHideMainWindow" xml:space="preserve">
     <value>显示或隐藏主界面</value>
   </data>
-  <data name="UpdateStandalonePackageTip" xml:space="preserve">
-    <value>您当前运行的是独立包，请手动下载 SelfContained.7z文件解压覆盖！</value>
-  </data>
   <data name="TbPreSocksPort4Sub" xml:space="preserve">
     <value>自定义配置的Socks端口</value>
   </data>
@@ -1343,7 +1334,7 @@
     <value>请不要使用不安全的HTTP协议订阅地址</value>
   </data>
   <data name="TbSettingsCurrentFontFamilyLinuxTip" xml:space="preserve">
-    <value>安装字体到系统中，重启设置</value>
+    <value>安装字体到系统中，选择或填入字体名称，重启设置</value>
   </data>
   <data name="menuExitTips" xml:space="preserve">
     <value>是否确定退出？</value>
@@ -1372,8 +1363,8 @@
   <data name="TbSettingsHide2TrayWhenClose" xml:space="preserve">
     <value>关闭窗口时隐藏至托盘</value>
   </data>
-  <data name="TbSettingsSpeedTestPageSize" xml:space="preserve">
-    <value>测试时自动分批的每批数量（最大1000）</value>
+  <data name="TbSettingsMixedConcurrencyCount" xml:space="preserve">
+    <value>多线程测试时的并发数量</value>
   </data>
   <data name="TbSettingsExceptionTip2" xml:space="preserve">
     <value>例外：对于下列地址不使用代理配置文件。使用逗号(,)分隔。</value>
@@ -1401,5 +1392,22 @@
   </data>
   <data name="TbSettingsTrayMenuServersLimit" xml:space="preserve">
     <value>托盘右键菜单服务器展示数量限制</value>
+  <data name="SpeedtestingTestFailedPart" xml:space="preserve">
+    <value>开始对失败部分进行重新测试，剩余 {0} 个。可按 ESC 终止...</value>
+  </data>
+  <data name="menuTestServerResult" xml:space="preserve">
+    <value>按测试结果</value>
+  </data>
+  <data name="menuRemoveInvalidServerResult" xml:space="preserve">
+    <value>按测试结果移除无效</value>
+  </data>
+  <data name="RemoveInvalidServerResultTip" xml:space="preserve">
+    <value>移除无效测试结果 {0} 个。</value>
+  </data>
+  <data name="TbPorts7" xml:space="preserve">
+    <value>跳跃端口范围</value>
+  </data>
+  <data name="TbPorts7Tips" xml:space="preserve">
+    <value>会覆盖端口，多组时用逗号(,)隔开</value>
   </data>
 </root>

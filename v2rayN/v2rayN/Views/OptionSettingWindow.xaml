@@ -1,4 +1,4 @@
-﻿<reactiveui:ReactiveWindow
+<reactiveui:ReactiveWindow
     x:Class="v2rayN.Views.OptionSettingWindow"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -780,7 +780,7 @@
                             x:Name="cmbcurrentFontFamily"
                             Grid.Row="16"
                             Grid.Column="1"
-                            Width="200"
+                            Width="300"
                             Margin="{StaticResource Margin8}"
                             MaxDropDownHeight="1000"
                             Style="{StaticResource DefComboBox}" />
@@ -803,11 +803,14 @@
                         <TextBox
                             x:Name="txtSpeedTestPageSize"
                             Grid.Row="17"
+                            Text="{x:Static resx:ResUI.TbSettingsMixedConcurrencyCount}" />
+                        <ComboBox
+                            x:Name="cmbMixedConcurrencyCount"
+                            Grid.Row="16"
                             Grid.Column="1"
                             Width="200"
                             Margin="{StaticResource Margin8}"
-                            HorizontalAlignment="Left"
-                            Style="{StaticResource DefTextBox}" />
+                            Style="{StaticResource DefComboBox}" />
 
                         <TextBlock
                             Grid.Row="18"
@@ -884,7 +887,7 @@
                             x:Name="cmbMainGirdOrientation"
                             Grid.Row="22"
                             Grid.Column="1"
-                            Width="300"
+                            Width="200"
                             Margin="{StaticResource Margin8}"
                             Style="{StaticResource DefComboBox}" />
 
